@@ -75,13 +75,17 @@ dependencies {
 ```
 
 ### 
-**SAMPLE CODE: Use `convertWebViewToPdf(..)` to save a WebView object as a PDF file in your arbitary directory. Use `openPdfFile(..)` to open a pdf file using chooser.
+**SAMPLE CODE :**
+
+Use `convertWebViewToPdf(..)` to save a WebView object as a PDF file in your arbitary directory. Use `openPdfFile(..)` to open a pdf file using chooser.
 Also you can use `buildPdfPermissionsRationalDialog(..)` when the permissions are denied.**
 ```
 File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/MyExapmleApp/");
 String fileName = "Exapmle.pdf";
 
+
 //Receive webView in "onFinished(WebView webView, String url)" callback and pass it to the following method.
+
 WebViewToPdf.convertWebViewToPdf(mContext, webView, directory, fileName, new WebViewToPdf.OnConvertResultListener() {
 
             @Override
