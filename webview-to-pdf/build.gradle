@@ -43,7 +43,7 @@ afterEvaluate {
                 from components.release
                 groupId 'amir-asdp'
                 artifactId 'webview-to-pdf'
-                version = '1.0.0'
+                version = '1.0.1'
             }
         }
     }
@@ -51,8 +51,8 @@ afterEvaluate {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
+    implementation 'androidx.appcompat:appcompat:1.6.0'
+    implementation 'com.google.android.material:material:1.7.0'
     implementation 'com.karumi:dexter:6.2.3'
 
     testImplementation 'junit:junit:4.13.2'

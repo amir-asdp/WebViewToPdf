@@ -149,7 +149,40 @@ public class WebViewToPdf {
             }
         };
 
-        return new MaterialAlertDialogBuilder(context, R.style.AlertDialogStyle)
+        return new MaterialAlertDialogBuilder(context)
+                .setIcon(R.drawable.ic_permission_media)
+                .setTitle(dialogStrings[0])
+                .setMessage(dialogStrings[1])
+                .setPositiveButton(dialogStrings[2], rationalDialogClickListener)
+                .setNegativeButton(dialogStrings[3], rationalDialogClickListener)
+                .create();
+
+    }
+
+    public static AlertDialog buildPdfPermissionsRationalDialog(Context context, String language, int overrideThemeResId){
+
+        String[] dialogStrings = context.getResources().getStringArray(R.array.english_permission_rational_dialog);
+        if (language.equals(PERMISSION_DIALOG_FARSI)){
+            dialogStrings = context.getResources().getStringArray(R.array.farsi_permission_rational_dialog);
+        }
+
+        DialogInterface.OnClickListener rationalDialogClickListener = new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                if (which == DialogInterface.BUTTON_POSITIVE){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
+                        context.startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                    }
+                    else {
+                        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
+                        context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(uri));
+                    }
+                }
+                dialog.cancel();
+            }
+        };
+
+        return new MaterialAlertDialogBuilder(context, overrideThemeResId)
                 .setIcon(R.drawable.ic_permission_media)
                 .setTitle(dialogStrings[0])
                 .setMessage(dialogStrings[1])
