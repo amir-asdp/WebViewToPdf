@@ -22,7 +22,7 @@ allprojects {
 
 ```
 dependencies {
-	        implementation 'com.github.amir-asdp:WebViewToPdf:1.0.1'
+	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.0'
 	}
 ```
 
@@ -78,22 +78,41 @@ dependencies {
 **SAMPLE CODE :**
 
 Use `convertWebViewToPdf(..)` to save a WebView object as a PDF file in your arbitary directory. Use `openPdfFile(..)` to open a pdf file using chooser.
-Also you can use `buildPdfPermissionsRationalDialog(..)` when the permissions are denied.**
+Also you can use `buildPdfPermissionsRationalDialog(..)` when the permissions are denied.
 ```
-File directory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/MyExapmleApp/");
+Context mContext = MyExampleActivity.this;
+File destinationDirectory = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS + "/MyExapmleApp/");
 String fileName = "Exapmle.pdf";
 
 
-//Receive webView in "onFinished(WebView webView, String url)" callback and pass it to the following method.
+//Receive webView inside of "onFinished(WebView webView, String url)" callback and pass it to the following method.
 
-WebViewToPdf.convertWebViewToPdf(mContext, webView, directory, fileName, new WebViewToPdf.OnConvertResultListener() {
+WebViewToPdf.convertWebViewToPdf(mContext, webView, destinationDirectory, fileName, new WebViewToPdf.OnConvertResultListener() {
 
             @Override
             public void onSuccess(String pdfFilePath) {
                 WebViewToPdf.openPdfFile(mContext, pdfFilePath, new WebViewToPdf.OnOpenResultListener() {
                     @Override
                     public void onPermissionDenied() {
-                        WebViewToPdf.buildPdfPermissionsRationalDialog(mContext, WebViewToPdf.PERMISSION_DIALOG_ENGLISH).show();
+                        WebViewToPdf.buildPdfPermissionsRationalDialog(mContext).show();
+                        
+                        /... or ...
+                        
+                        WebViewToPdf.buildPdfPermissionsRationalDialog(mContext, WebViewToPdf.DIALOG_LANG_ENGLISH).show();
+                        
+                        /... or ...
+                        
+                        WebViewToPdf.buildPdfPermissionsRationalDialog(mContext, WebViewToPdf.DIALOG_LANG_ENGLISH, themeResId).show();
+                        
+                        /... or ...
+                        
+                        WebViewToPdf.buildPdfPermissionsRationalDialog(mContext,
+                                                                "Custom Title",
+                                                                "Custom Message",
+                                                                "Custom Go Settings Button",
+                                                                "Custom Cancel Button",
+                                                                themeResId)
+                                                                .show();
                     }
                 });
             }
@@ -107,7 +126,7 @@ WebViewToPdf.convertWebViewToPdf(mContext, webView, directory, fileName, new Web
             }
             @Override
             public void onPermissionDenied() {
-                WebViewToPdf.buildPdfPermissionsRationalDialog(mContext, WebViewToPdf.PERMISSION_DIALOG_ENGLISH).show();
+                WebViewToPdf.buildPdfPermissionsRationalDialog(mContext, WebViewToPdf.DIALOG_LANG_ENGLISH).show();
             }
             
         });

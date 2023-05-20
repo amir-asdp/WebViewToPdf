@@ -4,7 +4,6 @@ import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -14,6 +13,7 @@ import android.print.PrintDocumentAdapter;
 import android.provider.Settings;
 import android.webkit.WebView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
 
@@ -29,13 +29,13 @@ import java.util.List;
 
 public class WebViewToPdf {
 
-    public static final String PERMISSION_DIALOG_FARSI = "fa";
-    public static final String PERMISSION_DIALOG_ENGLISH = "en";
+    public static final int DIALOG_LANG_ENGLISH = 1;
+    public static final int DIALOG_LANG_FARSI = 2;
 
-    public static void convertWebViewToPdf(Context context, WebView webView, File directory,
-                                           String fileName, OnConvertResultListener convertResultListener){
+    public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull File destinationDirectory,
+                                           @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
 
-        checkPdfPermissions(context, new OnPermissionResultListener() {
+        checkStoragePermissions(context, new OnPermissionResultListener() {
             @Override
             public void onResult(boolean areAllPermissionsGranted) {
                 if (areAllPermissionsGranted){
@@ -46,7 +46,7 @@ public class WebViewToPdf {
                             .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
                             .build();
                     PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(fileName);
-                    PdfFileWriter.writePdf(printAttributes, printAdapter, directory, fileName, new PdfFileWriter.OnPdfWriteListener() {
+                    PdfFileWriter.writePdf(printAttributes, printAdapter, destinationDirectory, fileName, new PdfFileWriter.OnPdfWriteListener() {
                         @Override
                         public void onSuccess(String pdfFilePath) {
                             convertResultListener.onSuccess(pdfFilePath);
@@ -71,8 +71,8 @@ public class WebViewToPdf {
 
     }
 
-    public static void openPdfFile(Context context, String path, OnOpenResultListener openResultListener){
-        checkPdfPermissions(context, new OnPermissionResultListener() {
+    public static void openPdfFile(@NonNull Context context, @NonNull String path, @NonNull OnOpenResultListener openResultListener){
+        checkStoragePermissions(context, new OnPermissionResultListener() {
             @Override
             public void onResult(boolean areAllPermissionsGranted) {
                 if (areAllPermissionsGranted){
@@ -100,7 +100,7 @@ public class WebViewToPdf {
         });
     }
 
-    public static void checkPdfPermissions(Context context, OnPermissionResultListener resultListener){
+    public static void checkStoragePermissions(@NonNull Context context, @NonNull OnPermissionResultListener resultListener){
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
             resultListener.onResult(Environment.isExternalStorageManager());
@@ -126,45 +126,38 @@ public class WebViewToPdf {
 
     }
 
-    public static AlertDialog buildPdfPermissionsRationalDialog(Context context, String language){
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context){
 
-        String[] dialogStrings = context.getResources().getStringArray(R.array.english_permission_rational_dialog);
-        if (language.equals(PERMISSION_DIALOG_FARSI)){
-            dialogStrings = context.getResources().getStringArray(R.array.farsi_permission_rational_dialog);
-        }
-
-        DialogInterface.OnClickListener rationalDialogClickListener = new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                if (which == DialogInterface.BUTTON_POSITIVE){
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                        context.startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
-                    }
-                    else {
-                        Uri uri = Uri.fromParts("package", context.getPackageName(), null);
-                        context.startActivity(new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).setData(uri));
-                    }
-                }
-                dialog.cancel();
-            }
-        };
-
-        return new MaterialAlertDialogBuilder(context)
-                .setIcon(R.drawable.ic_permission_media)
-                .setTitle(dialogStrings[0])
-                .setMessage(dialogStrings[1])
-                .setPositiveButton(dialogStrings[2], rationalDialogClickListener)
-                .setNegativeButton(dialogStrings[3], rationalDialogClickListener)
-                .create();
+        return buildPdfPermissionsRationalDialog(context, DIALOG_LANG_ENGLISH);
 
     }
 
-    public static AlertDialog buildPdfPermissionsRationalDialog(Context context, String language, int overrideThemeResId){
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, int dialogLanguageId){
 
-        String[] dialogStrings = context.getResources().getStringArray(R.array.english_permission_rational_dialog);
-        if (language.equals(PERMISSION_DIALOG_FARSI)){
+        return buildPdfPermissionsRationalDialog(context, dialogLanguageId, 0);
+
+    }
+
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, int dialogLanguageId, int overrideThemeResId){
+
+        String[] dialogStrings;
+        if (dialogLanguageId == DIALOG_LANG_FARSI) {
             dialogStrings = context.getResources().getStringArray(R.array.farsi_permission_rational_dialog);
         }
+        else {
+            dialogStrings = context.getResources().getStringArray(R.array.english_permission_rational_dialog);
+        }
+
+        return buildPdfPermissionsRationalDialog(context, dialogStrings[0], dialogStrings[1], dialogStrings[2], dialogStrings[3], overrideThemeResId);
+
+    }
+
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context,
+                                                                @NonNull String dialogTitle,
+                                                                @NonNull String dialogMessage,
+                                                                @NonNull String dialogGoSettingsButton,
+                                                                @NonNull String dialogCancelButton,
+                                                                int overrideThemeResId){
 
         DialogInterface.OnClickListener rationalDialogClickListener = new DialogInterface.OnClickListener() {
             @Override
@@ -184,10 +177,10 @@ public class WebViewToPdf {
 
         return new MaterialAlertDialogBuilder(context, overrideThemeResId)
                 .setIcon(R.drawable.ic_permission_media)
-                .setTitle(dialogStrings[0])
-                .setMessage(dialogStrings[1])
-                .setPositiveButton(dialogStrings[2], rationalDialogClickListener)
-                .setNegativeButton(dialogStrings[3], rationalDialogClickListener)
+                .setTitle(dialogTitle)
+                .setMessage(dialogMessage)
+                .setPositiveButton(dialogGoSettingsButton, rationalDialogClickListener)
+                .setNegativeButton(dialogCancelButton, rationalDialogClickListener)
                 .create();
 
     }

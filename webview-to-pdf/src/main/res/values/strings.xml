@@ -5,14 +5,14 @@
 
     <string-array name="farsi_permission_rational_dialog">
         <item>مجوز رسانه</item>
-        <item>برای ذخیره فایل قبض در حافظه ، مجوز دسترسی به فایل‌ها و رسانه لازم است. به تنظیمات برنامه رفته و مجوز را اعطا کنید.</item>
+        <item>برای ذخیره فایل در حافظه ، مجوز دسترسی به فایل‌ها و رسانه لازم است. به تنظیمات برنامه رفته و مجوز را اعطا کنید.</item>
         <item>رفتن به تنظیمات برنامه</item>
         <item>بستن</item>
     </string-array>
 
     <string-array name="english_permission_rational_dialog">
         <item>Files and Media Permission</item>
-        <item>In order to save pdf file in your mobile storage, we need files and media permission. Please go to app settings and grant the permission.</item>
+        <item>In order to save file in your mobile storage, we need files and media permission. Please go to app settings and grant the permission.</item>
         <item>Go to app settings</item>
         <item>Close</item>
     </string-array>
