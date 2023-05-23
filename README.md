@@ -22,7 +22,7 @@ allprojects {
 
 ```
 dependencies {
-	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.0'
+	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.1'
 	}
 ```
 
