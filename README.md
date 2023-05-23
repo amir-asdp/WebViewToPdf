@@ -1,11 +1,11 @@
 # Info
 **This library is supported by API 19 (Android 4.4) to API 33 (Android 13) and it has the following features :**
 
-- Create a PDF file from a WebView.
-- Save the created PDF file in an arbitary directory.
-- Open a PDF file using chooser.
+- Ability to Create a PDF file from a WebView.
+- Ability to Save the created PDF file in an arbitrary directory.
+- Ability to Open a PDF file using chooser.
 - Handles all required permissions according to the Android OS Version.
-- Build and show ***Go Settings Rational Dialog*** for denied permission scenario. 
+- Ability to Build and show ***Go Settings*** rational dialog for denied permission scenario.
 
 ### 
 ### 
@@ -77,7 +77,7 @@ dependencies {
 ### 
 **SAMPLE CODE :**
 
-Use `convertWebViewToPdf(..)` to save a WebView object as a PDF file in your arbitary directory. Use `openPdfFile(..)` to open a pdf file using chooser.
+Use `convertWebViewToPdf(..)` to save a WebView object as a PDF file in your arbitrary directory. Use `openPdfFile(..)` to open a pdf file using chooser.
 Also you can use `buildPdfPermissionsRationalDialog(..)` when the permissions are denied.
 ```
 Context mContext = MyExampleActivity.this;
