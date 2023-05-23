@@ -78,12 +78,12 @@ public class WebViewToPdf {
                 if (areAllPermissionsGranted){
                     File pdfFile = new File(path);
 
-                    Uri uri = null;
+                    Uri uri;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
                         uri = FileProvider.getUriForFile(context, "com.package.name.fileprovider", pdfFile);
                     }
                     else {
-                        Uri pdfUri = Uri.fromFile(pdfFile);
+                        uri = Uri.fromFile(pdfFile);
                     }
 
 
