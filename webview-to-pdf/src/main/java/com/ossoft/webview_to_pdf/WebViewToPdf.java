@@ -164,7 +164,7 @@ public class WebViewToPdf {
             public void onClick(DialogInterface dialog, int which) {
                 if (which == DialogInterface.BUTTON_POSITIVE){
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R){
-                        context.startActivity(new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION));
+                        context.startActivity(new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, Uri.parse("package:" + context.getPackageName())));
                     }
                     else {
                         Uri uri = Uri.fromParts("package", context.getPackageName(), null);
