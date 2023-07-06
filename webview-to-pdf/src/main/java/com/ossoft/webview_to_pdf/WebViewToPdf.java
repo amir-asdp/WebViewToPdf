@@ -80,7 +80,7 @@ public class WebViewToPdf {
 
                     Uri uri;
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N){
-                        uri = FileProvider.getUriForFile(context, "com.package.name.fileprovider", pdfFile);
+                        uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", pdfFile);
                     }
                     else {
                         uri = Uri.fromFile(pdfFile);

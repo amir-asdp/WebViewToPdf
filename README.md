@@ -22,7 +22,7 @@ allprojects {
 
 ```
 dependencies {
-	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.2'
+	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.3'
 	}
 ```
 
@@ -49,7 +49,7 @@ dependencies {
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="com.package.name.fileprovider"
+            android:authorities="${applicationId}.provider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
