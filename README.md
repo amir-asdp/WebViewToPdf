@@ -22,7 +22,7 @@ allprojects {
 
 ```
 dependencies {
-	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.3'
+	        implementation 'com.github.amir-asdp:WebViewToPdf:1.1.4'
 	}
 ```
 
@@ -87,7 +87,7 @@ String fileName = "Exapmle.pdf";
 
 //Receive webView inside of "onFinished(WebView webView, String url)" callback and pass it to the following method.
 
-WebViewToPdf.convertWebViewToPdf(mContext, webView, destinationDirectory, fileName, new WebViewToPdf.OnConvertResultListener() {
+WebViewToPdf.convertWebViewToPdf(mContext, webView, PrintAttributes.MediaSize.ISO_A4, destinationDirectory, fileName, new WebViewToPdf.OnConvertResultListener() {
 
             @Override
             public void onSuccess(String pdfFilePath) {

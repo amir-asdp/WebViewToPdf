@@ -13,6 +13,7 @@ import android.print.PrintDocumentAdapter;
 import android.provider.Settings;
 import android.webkit.WebView;
 
+import androidx.annotation.IntDef;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.FileProvider;
@@ -25,15 +26,21 @@ import com.karumi.dexter.listener.PermissionRequest;
 import com.karumi.dexter.listener.multi.MultiplePermissionsListener;
 
 import java.io.File;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 import java.util.List;
 
 public class WebViewToPdf {
 
-    public static final int DIALOG_LANG_ENGLISH = 1;
-    public static final int DIALOG_LANG_FARSI = 2;
-
     public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull File destinationDirectory,
                                            @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
+
+        convertWebViewToPdf(context, webView, PrintAttributes.MediaSize.ISO_A4, destinationDirectory, fileName, convertResultListener);
+
+    }
+
+    public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull PrintAttributes.MediaSize pageLayout,
+                                           @NonNull File destinationDirectory, @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
 
         checkStoragePermissions(context, new OnPermissionResultListener() {
             @Override
@@ -41,7 +48,7 @@ public class WebViewToPdf {
                 if (areAllPermissionsGranted){
                     PrintAttributes printAttributes = new PrintAttributes.Builder()
                             .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
-                            .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
+                            .setMediaSize(pageLayout)
                             .setResolution(new PrintAttributes.Resolution("pdf", "pdf", 600, 600))
                             .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
                             .build();
@@ -132,13 +139,13 @@ public class WebViewToPdf {
 
     }
 
-    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, int dialogLanguageId){
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, @DialogLangId int dialogLanguageId){
 
         return buildPdfPermissionsRationalDialog(context, dialogLanguageId, 0);
 
     }
 
-    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, int dialogLanguageId, int overrideThemeResId){
+    public static AlertDialog buildPdfPermissionsRationalDialog(@NonNull Context context, @DialogLangId int dialogLanguageId, int overrideThemeResId){
 
         String[] dialogStrings;
         if (dialogLanguageId == DIALOG_LANG_FARSI) {
@@ -184,6 +191,14 @@ public class WebViewToPdf {
                 .create();
 
     }
+
+
+
+    @IntDef({DIALOG_LANG_ENGLISH, DIALOG_LANG_FARSI})
+    @Retention(RetentionPolicy.SOURCE)
+    public @interface DialogLangId{}
+    public static final int DIALOG_LANG_ENGLISH = 1;
+    public static final int DIALOG_LANG_FARSI = 2;
 
 
 
