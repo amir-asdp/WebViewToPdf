@@ -35,22 +35,37 @@ public class WebViewToPdf {
     public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull File destinationDirectory,
                                            @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
 
-        convertWebViewToPdf(context, webView, PrintAttributes.MediaSize.ISO_A4, destinationDirectory, fileName, convertResultListener);
+        convertWebViewToPdf(context, webView, PrintAttributes.MediaSize.ISO_A4, PrintAttributes.Margins.NO_MARGINS, destinationDirectory, fileName, convertResultListener);
 
     }
 
     public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull PrintAttributes.MediaSize pageLayout,
                                            @NonNull File destinationDirectory, @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
 
+        convertWebViewToPdf(context, webView, pageLayout, PrintAttributes.Margins.NO_MARGINS, destinationDirectory, fileName, convertResultListener);
+
+    }
+
+    public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull PrintAttributes.Margins pageMargins,
+                                           @NonNull File destinationDirectory, @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
+
+        convertWebViewToPdf(context, webView, PrintAttributes.MediaSize.ISO_A4, pageMargins, destinationDirectory, fileName, convertResultListener);
+
+    }
+
+    public static void convertWebViewToPdf(@NonNull Context context, @NonNull WebView webView, @NonNull PrintAttributes.MediaSize pageLayout,
+                                           @NonNull PrintAttributes.Margins pageMargins, @NonNull File destinationDirectory,
+                                           @NonNull String fileName, @NonNull OnConvertResultListener convertResultListener){
+
         checkStoragePermissions(context, new OnPermissionResultListener() {
             @Override
             public void onResult(boolean areAllPermissionsGranted) {
                 if (areAllPermissionsGranted){
                     PrintAttributes printAttributes = new PrintAttributes.Builder()
-                            .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
                             .setMediaSize(pageLayout)
+                            .setMinMargins(pageMargins)
+                            .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
                             .setResolution(new PrintAttributes.Resolution("pdf", "pdf", 600, 600))
-                            .setMinMargins(PrintAttributes.Margins.NO_MARGINS)
                             .build();
                     PrintDocumentAdapter printAdapter = webView.createPrintDocumentAdapter(fileName);
                     PdfFileWriter.writePdf(printAttributes, printAdapter, destinationDirectory, fileName, new PdfFileWriter.OnPdfWriteListener() {
