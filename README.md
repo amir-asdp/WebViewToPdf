@@ -85,7 +85,7 @@ File destinationDirectory = Environment.getExternalStoragePublicDirectory(Enviro
 String fileName = "Exapmle.pdf";
 
 
-//Receive webView inside of "onFinished(WebView webView, String url)" callback and pass it to the following method.
+//Make sure that the url is fully loaded in your WebView object and then pass it to the following method:
 
 WebViewToPdf.convertWebViewToPdf(mContext, webView, PrintAttributes.MediaSize.ISO_A4, PrintAttributes.Margins.NO_MARGINS, destinationDirectory, fileName, new WebViewToPdf.OnConvertResultListener() {
 
